@@ -57,7 +57,6 @@ def chroma_subsampling(image):
         cr(tensor): batch x height/2 x width/2
     """
     image_2 = image.permute(0, 3, 1, 2).clone()
-    print(image_2.shape)
     avg_pool = nn.AvgPool2d(kernel_size=2, stride=(2, 2),
                             count_include_pad=False)
     cb = avg_pool(image_2[:, 1, :, :].unsqueeze(1))
@@ -79,7 +78,6 @@ def block_splitting(image):
     batch_size = image.shape[0]
     image_reshaped = image.view(batch_size, height // k, k, -1, k)
     image_transposed = image_reshaped.permute(0, 1, 3, 2, 4)
-    print(image_transposed.shape, 'vs', k)
     return image_transposed.contiguous().view(batch_size, -1, k, k)
 
 
@@ -151,7 +149,7 @@ def c_quantize(image, rounding, factor=1):
     return image
 
 
-def compress_jpeg(imgs, rounding=torch.round(), factor=1):
+def compress_jpeg(imgs, rounding=torch.round, factor=1):
     """ Full JPEG compression algortihm
     Input:
         imgs(tensor): batch x 3 x height x width
@@ -160,8 +158,7 @@ def compress_jpeg(imgs, rounding=torch.round(), factor=1):
     Ouput:
         compressed(dict(tensor)): batch x h*w/64 x 8 x 8
     """
-    temp = rgb_to_ycbcr_jpeg(imgs)
-    print(temp.shape)
+    temp = rgb_to_ycbcr_jpeg(imgs*255)
     y, cb, cr = chroma_subsampling(temp)
     components = {'y': y, 'cb': cb, 'cr': cr}
     for k in components.keys():

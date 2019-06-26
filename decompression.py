@@ -3,7 +3,6 @@ import itertools
 import numpy as np
 # PyTorch
 import torch
-import torch.nn as nn
 # Local
 import utils
 
@@ -150,7 +149,7 @@ def ycbcr_to_rgb_jpeg(image):
     return result.permute(0, 3, 1, 2)
 
 
-def decompress(compressed, height, width, rounding=torch.round(), factor=1):
+def decompress_jpeg(compressed, height, width, rounding=torch.round, factor=1):
     """ Full JPEG decompression algortihm
     Input:
         compressed(dict(tensor)): batch x h*w/64 x 8 x 8
@@ -171,4 +170,4 @@ def decompress(compressed, height, width, rounding=torch.round(), factor=1):
     image = ycbcr_to_rgb_jpeg(image)
     image = torch.min(255*torch.ones_like(image),
                       torch.max(torch.zeros_like(image), image))
-    return image
+    return image/255
