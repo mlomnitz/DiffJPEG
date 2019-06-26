@@ -1,0 +1,2 @@
+## DiffJPEG: A PyTorch implementation 
+This repository contains a pytorch implementation of differentiable jpeg compression algorithm.  This work is based on the discussion in this [paper](https://machine-learning-and-security.github.io/papers/mlsec17_paper_54.pdf).  The work relies heavily on the tensorflow implementation in this [repository](https://github.com/rshin/differentiable-jpeg)
