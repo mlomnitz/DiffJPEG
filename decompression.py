@@ -149,7 +149,7 @@ def ycbcr_to_rgb_jpeg(image):
     return result.permute(0, 3, 1, 2)
 
 
-def decompress_jpeg(compressed, height, width, rounding=torch.round, factor=1):
+def decompress_jpeg(y, cb, cr, height, width, rounding=torch.round, factor=1):
     """ Full JPEG decompression algortihm
     Input:
         compressed(dict(tensor)): batch x h*w/64 x 8 x 8
@@ -159,9 +159,10 @@ def decompress_jpeg(compressed, height, width, rounding=torch.round, factor=1):
         image(tensor): batch x 3 x height x width
     """
     upresults = {}
-    for k in compressed.keys():
-        comp = c_dequantize(compressed[k], factor) if k in (
-            'cb', 'cr') else y_dequantize(compressed[k], factor)
+    components = {'y': y, 'cb': cb, 'cr': cr}
+    for k in components.keys():
+        comp = c_dequantize(components[k], factor) if k in (
+            'cb', 'cr') else y_dequantize(components[k], factor)
         comp = idct_8x8(comp)
         comp = block_merging(comp, int(height/2), int(width/2)
                              ) if k in ('cb', 'cr') else block_merging(comp, height, width)

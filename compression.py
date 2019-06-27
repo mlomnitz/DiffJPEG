@@ -168,4 +168,4 @@ def compress_jpeg(imgs, rounding=torch.round, factor=1):
             'cb', 'cr') else y_quantize(comp, torch.round, factor=factor)
 
         components[k] = comp
-    return components
+    return components['y'], components['cb'], components['cr']
