@@ -9,6 +9,12 @@ from utils import diff_round, quality_to_factor
 
 class DiffJPEG(nn.Module):
     def __init__(self, differentiable=True, quality=80):
+        ''' Initialize the DiffJPEG layer
+        Inputs:
+            differentiable(bool): If true uses custom differentiable
+                rounding function, if false uses standrard torch.round
+            quality(float): Quality factor for jpeg compression scheme. 
+        '''
         super(DiffJPEG, self).__init__()
         if differentiable:
             self.rounding = diff_round
@@ -17,6 +23,9 @@ class DiffJPEG(nn.Module):
         self.factor = quality_to_factor(quality)
 
     def forward(self, x):
+        '''
+
+        '''
         height, width = x.shape[2:]
         y, cb, cr = compress_jpeg(
             x, rounding=self.rounding, factor=self.factor)
