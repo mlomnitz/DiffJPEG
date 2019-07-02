@@ -1,3 +1,10 @@
+"""
+
+Note to user:  This file, while functional, is not fully differentiable in
+ PyTorch and is not easily moved to and from the gpu.  For updated version use
+ the source copde in modules and updated DiffJPEG module.
+
+"""
 # Standard libraries
 import itertools
 import numpy as np
@@ -22,8 +29,8 @@ def rgb_to_ycbcr(image):
     shift = [16., 128., 128.]
     image = image
     image = image.permute(0, 2, 3, 1)
-    result = np.tensordot(image.numpy(), matrix, axes=1) + shift
-    result = torch.from_numpy(result)
+    result = torch.tensordot(image, torch.from_numpy(matrix), dims=1) + shift
+#    result = torch.from_numpy(result)
     result.view(image.shape)
     return result
 
@@ -41,8 +48,8 @@ def rgb_to_ycbcr_jpeg(image):
         dtype=np.float32).T
     shift = [0., 128., 128.]
     image = image.permute(0, 2, 3, 1)
-    result = np.tensordot(image.numpy(), matrix, axes=1) + shift
-    result = torch.from_numpy(result)
+    result = torch.tensordot(image, torch.from_numpy(matrix), dims=1) + shift
+#    result = torch.from_numpy(result)
     result.view(image.shape)
     return result
 
@@ -115,8 +122,8 @@ def dct_8x8(image):
             (2 * y + 1) * v * np.pi / 16)
     alpha = np.array([1. / np.sqrt(2)] + [1] * 7)
     scale = np.outer(alpha, alpha) * 0.25
-    result = scale * np.tensordot(image.numpy(), tensor, axes=2)
-    result = torch.from_numpy(result)
+    result = scale * torch.tensordot(image, tensor, dims=2)
+    #result = torch.from_numpy(result)
     result.view(image.shape)
     return result
 
