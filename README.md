@@ -14,7 +14,7 @@ DiffJPEG functions as a standard pytorch module/layer.  To use, first import the
 
 ``` python
 from DiffJPEG import DiffJPEG
-jpeg = DiffJPEG(hieght=224, width=224, differentiable=True, quality=80)
+jpeg = DiffJPEG(height=224, width=224, differentiable=True, quality=80)
 ```
 
 ![image](./diffjpeg.png)
